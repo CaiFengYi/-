@@ -1,0 +1,97 @@
+#include<iostream>
+#include<string>
+#define OK 1
+#define ERROR 0
+#define MAXSIZE 10000
+using namespace std;
+
+typedef struct LNode		//定义链表
+{
+	int data;			//数据域
+	LNode* next;//指针域  ps:因为编译器支持简介模式，因此将struct LNode *next转成Lnode *next
+}LNode, * LinkList;
+
+int InitList(LinkList& L)		//初始化链表
+{
+	L = new LNode;
+	L->next = NULL;
+	return OK;
+}
+
+int InputList_L1(LinkList& L, int n)//逆序存放，前插法
+{
+	int i;
+	for (i = 0; i < n; i++)
+	{
+		LNode* p = new LNode;
+		cin >> p->data;
+		p->next = L->next;
+		L->next = p;
+	}
+	return OK;
+}
+
+int InputList_L2(LinkList L, int n)//顺序存放，后插法
+{
+	int i;
+	LNode* p, * r;
+	r = L;
+	for (i = 0; i < n; i++)
+	{
+		p = new LNode;
+		cin >> p->data;
+		p->next = NULL;
+		r->next = p;
+		r = p;
+	}
+	return OK;
+}
+
+void SearchL(LinkList L)
+	{
+	int temp = 1, m = 0;
+	int *a=new int[MAXSIZE];
+	int i=0, j;
+	LNode* p = new LNode;
+	p = L->next;
+	m = p->data;
+	while (p->next)
+	{
+		temp++;
+		if (p->next->data == m)
+		{
+			i++;
+
+			a[i] = temp;
+		}
+		if (p->next->data > m)
+		{
+			memset(a,'\0', sizeof(a));
+			i = 0;
+			a[i] = temp;
+			m = p->next->data;
+		}
+		p = p->next;
+	}
+	for (j = 0; j <= i; j++)
+	{
+		cout << "链表中的第" << a[j] << "个节点有最大值，最大值为" << m << endl;
+	}
+	delete[]a;
+	delete p;
+	}
+
+
+
+
+int main()
+{
+	int n;
+	cin >> n;
+	LinkList L;
+	InitList(L);
+	InputList_L2(L, n);
+	SearchL(L);
+
+	return 0;
+}
