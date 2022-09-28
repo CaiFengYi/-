@@ -1,0 +1,114 @@
+#include<iostream>
+#include<string>
+#define OK 1;
+#define ERROR 0;
+using namespace std;
+
+typedef struct LNode		//定义链表
+{
+	int data;			//数据域
+	LNode* next;//指针域  ps:因为编译器支持简介模式，因此将struct LNode *next转成Lnode *next
+}LNode, * LinkList;
+
+int InitList(LinkList& L)		//初始化链表
+{
+	L = new LNode;
+	L->next = NULL;
+	return OK;
+}
+
+int InputList_L1(LinkList& L, int n)//逆序存放，前插法
+{
+	int i;
+	for (i = 0; i < n; i++)
+	{
+		LNode* p = new LNode;
+		cin >> p->data;
+		p->next = L->next;
+		L->next = p;
+	}
+	return OK;
+}
+
+int InputList_L2(LinkList L, int n)//顺序存放，后插法
+{
+	int i;
+	LNode* p, * r;
+	r = L;
+	for (i = 0; i < n; i++)
+	{
+		p = new LNode;
+		cin >> p->data;
+		p->next = NULL;
+		r->next = p;
+		r = p;
+	}
+	return OK;
+}
+
+int OutputList_L(LinkList L)//输出链表
+{
+	LNode* p = new LNode;
+	p = L;
+	while (p->next)
+	{
+		cout << p->next->data << " ";
+		p = p->next;
+	}
+	return OK;
+}
+
+void MergeList_L(LinkList& LA, LinkList& LB, LinkList& LC)
+{
+	LinkList pa, pb, pc;
+	LNode* q = new LNode;
+	pa = LA->next;
+	pb = LB->next;
+	LC = LA;
+	pc = LC;
+
+	while (pa || pb)
+	{
+		if (!pa)
+		{
+			q = pb;
+			pb = pb->next;
+		}
+		else if(!pb)
+		{
+			q = pa;
+			pa = pa->next;
+		}
+		else if (pa->data <= pb->data)
+		{
+			q = pa;
+			pa = pa->next;
+		}
+		else
+		{
+				q = pb;
+				pb = pb->next;
+		}
+		q->next = LC->next;
+		LC->next = q;
+	}
+	delete LB;
+}
+
+
+
+int main()
+{
+	int n;
+	cin >> n;
+	LinkList LA, LB, LC;
+	InitList(LA);
+	InitList(LB);
+	InitList(LC);
+	InputList_L2(LA, n);
+	InputList_L2(LB, n);
+	MergeList_L(LA, LB, LC);
+	OutputList_L(LC);
+
+	return 0;
+}
