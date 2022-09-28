@@ -1,0 +1,91 @@
+#include<iostream>
+#include<string>
+#define OK 1;
+#define ERROR 0;
+using namespace std;
+
+typedef struct LNode		//定义链表
+{
+	int data;			//数据域
+	LNode* next;//指针域  ps:因为编译器支持简介模式，因此将struct LNode *next转成Lnode *next
+}LNode, * LinkList;
+
+int InitList(LinkList& L)		//初始化链表
+{
+	L = new LNode;
+	L->next = NULL;
+	return OK;
+}
+
+int InputList_L1(LinkList& L, int n)//逆序存放，前插法
+{
+	int i;
+	for (i = 0; i < n; i++)
+	{
+		LNode* p = new LNode;
+		cin >> p->data;
+		p->next = L->next;
+		L->next = p;
+	}
+	return OK;
+}
+
+int InputList_L2(LinkList L, int n)//顺序存放，后插法
+{
+	int i;
+	LNode* p, * r;
+	r = L;
+	for (i = 0; i < n; i++)
+	{
+		p = new LNode;
+		cin >> p->data;
+		p->next = NULL;
+		r->next = p;
+		r = p;
+	}
+	return OK;
+}	
+	
+	
+void InverseL(LinkList& L)
+{	
+	LNode* p = new LNode;
+	LNode* q = new LNode;
+	p = L->next;
+	L->next = NULL;
+	while (p)
+	{
+		q = p->next;//指向p的下一个结点
+		p->next = L->next;//将p的指针指向头指针的下一个位置（前插法）
+		L->next = p;//将头指针指向p
+		p = q;//将p后移
+	}
+
+	delete p, q;
+
+}	
+
+
+void Output(LinkList L)
+{
+	LNode* p = new LNode;
+	p = L->next;
+	while (p)
+	{
+		cout << p->data << endl;
+		p = p->next;
+	}
+}
+
+
+int main()
+{
+	int n;
+	cin >> n;
+	LinkList L;
+	InitList(L);
+	InputList_L2(L, n);
+	InverseL(L);
+	Output(L);
+	return 0;
+}
